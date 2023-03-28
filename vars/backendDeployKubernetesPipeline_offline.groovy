@@ -32,19 +32,17 @@ def call(GIT_URL) {
 
                 steps {
                     sh '''
-cat << EOF > Dockerfile
+cat << EOF > /home/jenkins/agent/workspace/Dockerfile
 FROM fellah/gitbook
 COPY /home/jenkins/agent/workspace/backend /srv/gitbook
 EOF'''
-sh "ls /home/jenkins/agent/workspace/backend "
-sh "cat /home/jenkins/agent/workspace/backend/Dockerfile "
 
                 }
 
             }
             stage('docker镜像构建') {
                 steps {
-                    sh "docker build -f /home/jenkins/agent/workspace/backend/Dockerfile  -t gitbook:latest ."
+                    sh "docker build -f /home/jenkins/agent/workspace/Dockerfile  -t gitbook:latest ."
                     echo 'docker镜像构建成功'
                 }
             }
