@@ -1,0 +1,81 @@
+---
+
+APISERVER: "https://192.168.50.201:6443"
+
+K8S_TOKEN: "0aeecbfa-402b-4e35-bb88-8977b28e1c7c"
+
+# docker镜像仓库id
+REGISTRY_USER_ID: "library"
+
+# docker镜像仓库url
+DOCKER_IMAGE_PREFIX: "hub.7d.com"
+
+# 过渡阶段 git 上 nginx config 项目仓库默认拉取分支
+K8S_CONFIG_RESOURCES_BRANCH_NAME: "master"
+# 过渡阶段 git 上 nginx config 项目仓库本机存放路径
+K8S_CONFIG_RESOURCES_DIR: "k8s_config_resources_dir"
+
+
+# 新方式发布，git 上 控制器资源配置 仓库默认拉取分支
+K8S_CONTROLLER_RESOURCES_BRANCH_NAME: "master"
+# 新方式发布，git 上 控制器资源配置 仓库本机存放路径
+K8S_CONTROLLER_RESOURCES_DIR: "k8s_controller_resources_dir"
+
+# docker存放路径
+DOCKERFILE_DIR: "devops"
+# dockerfile 名称
+DOCKERFILE_FILENAME: "Dockerfile"
+#mySpringBoot.sh
+MYSPRINGBOOT: "mySpringBoot.sh"
+#del_old_log.sh
+DEL_OLD_LOG: "del_old_log.sh"
+# deployment 名称
+DEPLOYMENT_FILENAME: "deployment.yaml"
+# deployment 名称
+STATEFULSET_FILENAME: "statefulset.yaml"
+# service 名称
+SERVICE_FILENAME: "service.yaml"
+# ingress 名称
+INGRESS_FILENAME: "ingress.yaml"
+# configmap 名称
+CONFIGMAP_FILENAME: "configmap.yaml"
+
+
+# dockerfile模板目录路径
+dockerfile_resource_path: "k8sTemplates/dockerfile/"
+# 后端dockerfile模板
+backend_dockerfile_template: "backend-Dockerfile"
+
+
+
+# deployment模板目录路径
+deployment_resource_path: "k8sTemplates/deployment/"
+
+# 后端deployment模板
+backend_deployment_template: "backend-deployment.yml"
+
+# 前端deployment模板
+frontend_deployment_template: "frontend-deployment.yml"
+
+
+# service模板目录路径
+service_resource_path: "k8sTemplates/service/"
+# 后端service模板
+backend_service_template: "backend-service.yml"
+# 前端service模板
+frontend_service_template: "frontend-service.yml"
+
+
+# ingress模板目录路径
+ingress_resource_path: "k8sTemplates/ingress/"
+# ingress 模板
+backend_ingress_template: "ingress.yml"
+
+
+
+
+
+
+
+
+

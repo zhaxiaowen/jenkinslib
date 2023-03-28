@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: jenkins
+  labels:
+    app: build
+spec:
+  serviceAccountName: jenkins-admin
+  securityContext:
+    runAsUser: 0
+  containers:
+    - name: kaniko
+      image: hub.7d.com/library/kaniko-project-executor
+      imagePullPolicy: IfNotPresent
+      resources:
+        requests:
+          cpu: 200m
+          memory: 200Mi
+      volumeMounts:
+        - name: kaniko-secret
+          mountPath: /kaniko/.docker
+      tty: true
+      command:
+        - sleep
+      args:
+        - 99d
+    - name: jenkinspython3
+      image: hub.7d.com/library/centos7-python395-jenkins
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+      command:
+        - sleep
+      args:
+        - 99d
+      env:
+        - name: CONTAINER_ENV_VAR
+          value: maven
+      volumeMounts:
+        - name: dockerclient
+          mountPath: /usr/bin/docker
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+        - name: docker-config
+          mountPath: /etc/docker
+        - name: timezone
+          mountPath: /etc/localtime
+    - name: jnlp
+      image: hub.7d.com/library/jnlp-slave
+      resources:
+        requests:
+          cpu: 100m
+          memory: 150Mi
+    - name: maven
+      image: hub.7d.com/library/maven
+      resources:
+        requests:
+          cpu: 500m
+          memory: 512Mi
+      command:
+        - sleep
+      args:
+        - 99d
+      env:
+        - name: CONTAINER_ENV_VAR
+          value: maven
+      volumeMounts:
+        - name: dockerclient
+          mountPath: /usr/bin/docker
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+        - name: docker-config
+          mountPath: /etc/docker
+        - name: timezone
+          mountPath: /etc/localtime
+      tty: true
+  volumes:
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+    - name: dockerclient
+      hostPath:
+        path: /usr/bin/docker
+    - name: docker-config
+      hostPath:
+        path: /etc/docker
+    - name: timezone
+      hostPath:
+        path: /usr/share/zoneinfo/Asia/Shanghai
+        type: ""
+    - name: kaniko-secret
+      secret:
+        secretName: jenkins-harbor-register
+        items:
+          - key: .dockerconfigjson
+            path: config.json

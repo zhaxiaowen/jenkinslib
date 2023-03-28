@@ -1,0 +1,213 @@
+// 发布后端服务 pipeline
+def call(GIT_URL) {
+
+
+    pipeline {
+        agent {
+            kubernetes {
+                defaultContainer 'maven'
+                yaml libraryResource('podTemplates/jenkinspython3.yml')
+            }
+        }
+
+
+        stages {
+
+
+            stage("生成编译机器本地执行脚本") {
+
+
+                steps {
+                    script {
+
+                        println("得到的本地gitlab操作脚本：")
+                    }
+
+                }
+            }
+
+
+//            stage("编译业务项目") {
+//
+//                steps {
+//                    script {
+//                        dir(WORKDIR) {
+//                            mvn_path = MODEL_INFO["compile_path"]
+//                            backendMvnCompile(TAR_DIR, ZIP_DIR, mvn_path)
+//                        }
+//                    }
+//                }
+//            }
+
+//            stage("复制编译包到dockerfile目录") {
+//
+//                steps {
+//                    script {
+//                        sh "mkdir -p ${c.DOCKERFILE_DIR} && cp ${env.TAR_DIR}/* ${c.DOCKERFILE_DIR}/"
+//                    }
+//                }
+//            }
+
+//            stage("构建镜像并推送镜像") {
+//
+//
+//                steps {
+//                    script {
+//                        def image_namespace = BUSINESSLINE.toLowerCase()
+//
+//                        IMAGE_NAME = "${c.DOCKER_IMAGE_PREFIX}/${image_namespace}/backend-${MODEL}:${env.build_id}-${DEPLOY_TIME}".toLowerCase()
+//
+//                        k8s.createDockerFile(BUSINESSLINE, TYPE, MODEL, ENV_NAME, "", node_type)
+//
+//                        dir(c.DOCKERFILE_DIR) {
+//                            container('kaniko') {
+//                                // 执行构建镜像及推送镜像操作
+//                                sh """/kaniko/executor --context ./ --dockerfile ${c.DOCKERFILE_FILENAME} --destination ${IMAGE_NAME.toLowerCase()}"""
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+
+//            stage("发布") {
+//
+//                steps {
+//                    script {
+//                        if (params.isUseProLatestImage == "Y") {
+//                            log.info("开始使用生产镜像发布")
+//                            IMAGE_NAME = opsapi.getLatestDeployVersion(BUSINESSLINE, MODEL)
+//                            log.info("获取的生产镜像地址：${IMAGE_NAME}")
+//                        }
+//
+//                        log.info("开始在${PROVIDER_CLOUD_LIST}云上部署${MODEL}服务的：${DEPLOY_CONTROLLER_LIST}控制器！")
+//                        def CLOUD_DIR = ""
+//                        for (PROVIDER_CLOUD in PROVIDER_CLOUD_LIST) {
+//                            if (PROVIDER_CLOUD == "TencentCloud") {
+//                                CLOUD_DIR = "tencent"
+//                            } else if (PROVIDER_CLOUD == "HuaWeiCloud") {
+//                                CLOUD_DIR = "huawei"
+//                            }
+//
+//                            log.info("开始执行 ${PROVIDER_CLOUD} 环境的发布")
+//                            def cloud_source_dir = "${c.K8S_CONTROLLER_RESOURCES_DIR}/business/${BUSINESSLINE.toLowerCase()}/${ENV_NAME}/${PROJECT}/${TYPE}/${MODEL}/${CLOUD_DIR}"
+//
+//                            for (DEPLOY_CONTROLLER in DEPLOY_CONTROLLER_LIST) {
+//                                log.info("准备开始发布${DEPLOY_CONTROLLER}控制器")
+//
+//                                def controller_file_list = sh(returnStdout: true, script: "find ${cloud_source_dir}/ -name \"${DEPLOY_CONTROLLER}*\" ").split()
+//
+//                                if (controller_file_list.size() < 1) {
+//                                    ws_log.error_out("请联系运维同事检查yaml文件是否在git存在，如果不存在，则运维同事使用 init_controller_yml 这个jenkins job来创建相关资源。")
+//                                }
+//
+//                                if (DEPLOY_CONTROLLER == "configmap") {
+//                                    for (controller_file in controller_file_list) {
+//                                        log.info("准备发布${DEPLOY_CONTROLLER}控制器文件：${controller_file}")
+//                                        sh "cat ${controller_file}"
+//
+//                                        def body_yaml = readYaml file: controller_file
+//                                        def body = readFile file: controller_file
+//                                        def NAMESPACE = body_yaml.metadata.namespace
+//                                        def NAME = body_yaml.metadata.name
+//                                        k8s.deployConfigmap(ENV_NAME, NAMESPACE, NAME, body, PROVIDER_CLOUD)
+//                                    }
+//                                }
+//
+//                                if (DEPLOY_CONTROLLER == "deployment") {
+//                                    for (controller_file in controller_file_list) {
+//                                        log.info("准备发布${DEPLOY_CONTROLLER}控制器文件：${controller_file}")
+//
+//                                        // deployment 需要替换下镜像名称
+//                                        k8s.BackendDeploymentModify(MODEL, IMAGE_NAME, controller_file)
+//                                        log.info("替换关键字后的${DEPLOY_CONTROLLER} yaml文件信息如下：")
+//                                        sh "cat ${controller_file}"
+//
+//                                        def body = readFile file: controller_file
+//                                        def body_yaml = readYaml file: controller_file
+//                                        def NAME = body_yaml.metadata.name
+//                                        def NAMESPACE = body_yaml.metadata.namespace
+//                                        k8s.deployDeployment(ENV_NAME, NAMESPACE, NAME, body, PROVIDER_CLOUD)
+//
+//                                        // 把yaml文件回写到gitlab
+//                                        def git_file_path = controller_file - "${c.K8S_CONTROLLER_RESOURCES_DIR}/"
+//                                        container('jenkinspython3') {
+//                                            pushFileChangeToGitlab(GIT_ID, git_file_path, body)
+//                                        }
+//                                    }
+//                                }
+//
+//                                if (DEPLOY_CONTROLLER == "statefulset") {
+//                                    for (controller_file in controller_file_list) {
+//                                        log.info("准备发布${DEPLOY_CONTROLLER}控制器文件：${controller_file}")
+//                                        sh "cat ${controller_file}"
+//
+//                                        // statefulset 需要替换下镜像名称
+//                                        k8s.BackendDeploymentModify(MODEL, IMAGE_NAME, controller_file)
+//                                        log.info("替换关键字后的${DEPLOY_CONTROLLER} yaml文件信息如下：")
+//                                        sh "cat ${controller_file}"
+//
+//                                        def body = readFile file: controller_file
+//                                        def body_yaml = readYaml file: controller_file
+//                                        def NAME = body_yaml.metadata.name
+//                                        def NAMESPACE = body_yaml.metadata.namespace
+//                                        k8s.deployStatefulSet(ENV_NAME, NAMESPACE, NAME, body, PROVIDER_CLOUD)
+//
+//                                        // 把yaml文件回写到gitlab
+//                                        def git_file_path = controller_file - "${c.K8S_CONTROLLER_RESOURCES_DIR}/"
+//                                        container('jenkinspython3') {
+//                                            pushFileChangeToGitlab(GIT_ID, git_file_path, body)
+//                                        }
+//                                    }
+//                                }
+//
+//                                if (DEPLOY_CONTROLLER == "service") {
+//                                    for (controller_file in controller_file_list) {
+//                                        log.info("准备发布${DEPLOY_CONTROLLER}控制器文件：${controller_file}")
+//                                        sh "cat ${controller_file}"
+//
+//                                        def BODY_YAML = readYaml file: controller_file
+//                                        def BODY = readFile file: controller_file
+//                                        def NAMESPACE = BODY_YAML.metadata.namespace
+//                                        def NAME = BODY_YAML.metadata.name
+//                                        k8s.deployService(ENV_NAME, NAMESPACE, NAME, BODY, BODY_YAML, PROVIDER_CLOUD)
+//                                    }
+//
+//                                    if (CLOUD_DIR == "tencent") {
+//                                        TOHER_CLOUD_DIR = "huawei"
+//                                        TOHER_PROVIDER_CLOUD = "HuaWeiCloud"
+//                                    } else if (CLOUD_DIR == "huawei") {
+//                                        TOHER_CLOUD_DIR = "tencent"
+//                                        TOHER_PROVIDER_CLOUD = "TencentCloud"
+//                                    }
+//
+//                                    def other_cloud_source_dir = "${c.K8S_CONTROLLER_RESOURCES_DIR}/business/${BUSINESSLINE.toLowerCase()}/${ENV_NAME}/${PROJECT}/${TYPE}/${MODEL}/${TOHER_CLOUD_DIR}"
+//
+//                                    def other_cloud_controller_file_list = []
+//                                    try {
+//                                        other_cloud_controller_file_list = sh(returnStdout: true, script: "find ${other_cloud_source_dir}/ -name \"${DEPLOY_CONTROLLER}*\" ").split()
+//                                    } catch (Exception e) {
+//                                        log.info("不存在跨云的servcie，故不执行生成跨云或跨namespace的service操作。")
+//                                        continue
+//                                    }
+//
+//                                    for (controller_file in other_cloud_controller_file_list) {
+//                                        log.info("准备发布${DEPLOY_CONTROLLER}控制器文件：${controller_file}")
+//                                        sh "cat ${controller_file}"
+//
+//                                        def BODY_YAML = readYaml file: controller_file
+//                                        def BODY = readFile file: controller_file
+//                                        def NAMESPACE = BODY_YAML.metadata.namespace
+//                                        def NAME = BODY_YAML.metadata.name
+//                                        k8s.deployService(ENV_NAME, NAMESPACE, NAME, BODY, BODY_YAML, TOHER_PROVIDER_CLOUD)
+//                                    }
+//
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+
+        }
+    }
+}
