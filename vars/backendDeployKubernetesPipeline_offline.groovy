@@ -40,15 +40,21 @@ sh "ls /home/jenkins/agent/workspace/backend "
 sh "cat /home/jenkins/agent/workspace/backend/Dockerfile "
 
                 }
-            }
 
+            }
+            stage('docker镜像构建') {
+                steps {
+                    sh "docker build -f /home/jenkins/agent/workspace/backend/Dockerfile  -t gitbook:latest ."
+                    echo 'docker镜像构建成功'
+                }
+            }
             stage("镜像上传") {
 
                 steps {
                     sh "docker login --username=admin   --password=qwe123456 hub.7d.com"
 //                    sh "docker login --username=admin   --password=qwe123456 harbor-core.harbor.svc.cluster.local"
-                    sh "docker tag hub.7d.com/library/gitbook"
-                    sh "docker push hub.7d.com/library/gitbook"
+                    sh "docker tag gitbook:latest hub.7d.com/library/gitbook:latest"
+                    sh "docker push hub.7d.com/library/gitbook:latest"
                 }
             }
 //            stage("复制编译包到dockerfile目录") {
