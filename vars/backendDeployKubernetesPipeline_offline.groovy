@@ -14,28 +14,30 @@ def call(GIT_URL) {
         stages {
 
 
-            stage("生成编译机器本地执行脚本") {
+            stage("拉取代码") {
 
 
                 steps {
                     script {
-
-                        println("得到的本地gitlab操作脚本：")
+                        echo "拉取项目代码开始"
+                        git credentialsId: "0aeecbfa-402b-4e35-bb88-8977b28e1c7c", url: "https://github.com/zhaxiaowen/study_node.git"
+                        echo "拉取项目代码结束"
                     }
 
                 }
             }
 
 
-//            stage("编译业务项目") {
+//            stage("生成dockerfile") {
 //
 //                steps {
-//                    script {
-//                        dir(WORKDIR) {
-//                            mvn_path = MODEL_INFO["compile_path"]
-//                            backendMvnCompile(TAR_DIR, ZIP_DIR, mvn_path)
-//                        }
-//                    }
+//                    sh '''
+//FROM fellah/gitbook
+//COPY gitbook /srv/gitbook
+//docker build -t gitbook:v2 .
+//EOF'''
+//
+//
 //                }
 //            }
 
