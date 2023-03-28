@@ -45,7 +45,8 @@ sh "cat /home/jenkins/agent/workspace/backend/Dockerfile "
             stage("镜像上传") {
 
                 steps {
-                    sh "docker login --username=admin   --password=qwe123456 harbor-core.harbor.svc.cluster.local"
+                    sh "docker login --username=admin   --password=qwe123456 hub.7d.com"
+//                    sh "docker login --username=admin   --password=qwe123456 harbor-core.harbor.svc.cluster.local"
                     sh "docker tag hub.7d.com/library/gitbook"
                     sh "docker push hub.7d.com/library/gitbook"
                 }
