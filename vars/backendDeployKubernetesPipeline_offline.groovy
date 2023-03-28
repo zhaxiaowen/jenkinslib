@@ -42,19 +42,27 @@ sh "cat /home/jenkins/agent/workspace/backend/Dockerfile "
                 }
             }
 
-            stage("复制编译包到dockerfile目录") {
+            stage("镜像上传") {
 
                 steps {
-                    script {
-                        dir("devops") {
-                            container('kaniko') {
-                                // 执行构建镜像及推送镜像操作
-                                sh """/kaniko/executor --context /home/jenkins/agent/workspace/backend --dockerfile 'Dockerfile' --destination 'harbor-core.harbor.svc.cluster.local:80/library/gitbook'"""
-                            }
-                        }
-                    }
+                    sh "docker login -u admin   -p qwe123456 harbor-core.harbor.svc.cluster.local"
+                    sh "docker tag hub.7d.com/library/gitbook"
+                    sh "docker push hub.7d.com/library/gitbook"
                 }
             }
+//            stage("复制编译包到dockerfile目录") {
+//
+//                steps {
+//                    script {
+//                        dir("devops") {
+//                            container('kaniko') {
+//                                // 执行构建镜像及推送镜像操作
+//                                sh """/kaniko/executor --context /home/jenkins/agent/workspace/backend --dockerfile 'Dockerfile' --destination 'harbor-core.harbor.svc.cluster.local:80/library/gitbook'"""
+//                            }
+//                        }
+//                    }
+//                }
+//            }
 
 //            stage("构建镜像并推送镜像") {
 //
