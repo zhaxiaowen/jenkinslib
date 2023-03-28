@@ -42,7 +42,8 @@ EOF'''
             }
             stage('docker镜像构建') {
                 steps {
-                    sh "docker build -f /home/jenkins/agent/workspace/Dockerfile  -t gitbook:latest ."
+                    sh "cd /home/jenkins/agent/workspace"
+                    sh "docker build -f Dockerfile  -t gitbook:latest ."
                     echo 'docker镜像构建成功'
                 }
             }
