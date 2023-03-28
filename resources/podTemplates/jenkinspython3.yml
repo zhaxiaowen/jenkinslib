@@ -46,7 +46,7 @@ spec:
         - name: timezone
           mountPath: /etc/localtime
     - name: jnlp
-      image: hub.7d.com/library/jnlp-slave
+      image: jnlp-slave:latest
       resources:
         requests:
           cpu: 100m
