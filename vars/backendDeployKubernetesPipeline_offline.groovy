@@ -28,27 +28,32 @@ def call(GIT_URL) {
             }
 
 
-//            stage("生成dockerfile") {
-//
-//                steps {
-//                    sh '''
-//FROM fellah/gitbook
-//COPY gitbook /srv/gitbook
-//docker build -t gitbook:v2 .
-//EOF'''
-//
-//
-//                }
-//            }
+            stage("生成dockerfile") {
 
-//            stage("复制编译包到dockerfile目录") {
-//
-//                steps {
-//                    script {
-//                        sh "mkdir -p ${c.DOCKERFILE_DIR} && cp ${env.TAR_DIR}/* ${c.DOCKERFILE_DIR}/"
-//                    }
-//                }
-//            }
+                steps {
+                    sh '''
+cat << EOF > Dockerfile
+FROM fellah/gitbook
+COPY /home/jenkins/agent/workspace/backend /srv/gitbook
+EOF'''
+
+
+                }
+            }
+
+            stage("复制编译包到dockerfile目录") {
+
+                steps {
+                    script {
+                        dir("devops") {
+                            container('kaniko') {
+                                // 执行构建镜像及推送镜像操作
+                                sh """/kaniko/executor --context ./ --dockerfile 'Dockerfile' --destination 'hub.7d.com/library/gitbook'"""
+                            }
+                        }
+                    }
+                }
+            }
 
 //            stage("构建镜像并推送镜像") {
 //
