@@ -30,16 +30,13 @@ def call(GIT_URL) {
             stage('docker镜像构建') {
                 steps {
                     sh "mkdir -p devops"
-                    sh "mv /home/jenkins/agent/workspace/backend  devops/gitbook"
+                    sh "cp -r /home/jenkins/agent/workspace/backend  devops/gitbook"
+                    sh '''
+cat << EOF > devops/Dockerfile
+FROM fellah/gitbook
+COPY devops/gitbook /srv/gitbook
+EOF'''
                 }
-//                steps {
-//                    sh '''
-//cat << EOF > devops/Dockerfile
-//FROM fellah/gitbook
-//COPY devops/gitbook /srv/gitbook
-//EOF'''
-//
-//                }
             }
 
 //            stage("生成dockerfile") {
