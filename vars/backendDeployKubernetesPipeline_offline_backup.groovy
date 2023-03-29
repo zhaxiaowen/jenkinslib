@@ -19,17 +19,9 @@ def call(GIT_URL) {
 
                 steps {
                     script {
-//                        echo "拉取项目代码开始"
-//                        git credentialsId: "0aeecbfa-402b-4e35-bb88-8977b28e1c7c", url: "https://github.com/zhaxiaowen/study_node.git",relativeTargetDir:"gitbook"
-//                        echo "拉取项目代码结束"
-                        checkout([$class                           : 'GitSCM',
-                                  branches                         : [[name: main]],
-                                  doGenerateSubmoduleConfigurations: false,
-                                  extensions                       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: "gitbook"]],
-                                  submoduleCfg                     : [],
-                                  userRemoteConfigs                : [[credentialsId: "0aeecbfa-402b-4e35-bb88-8977b28e1c7c", url: "https://github.com/zhaxiaowen/study_node.git"]]
-                        ])
-                        sh "sleep 3600"
+                        echo "拉取项目代码开始"
+                        git credentialsId: "0aeecbfa-402b-4e35-bb88-8977b28e1c7c", url: "https://github.com/zhaxiaowen/study_node.git",relativeTargetDir:"gitbook"
+                        echo "拉取项目代码结束"
                     }
 
                 }
