@@ -32,14 +32,14 @@ def call(GIT_URL) {
                     sh "mkdir -p devops"
                     sh "mv /home/jenkins/agent/workspace/backend  devops/gitbook"
                 }
-                steps {
-                    sh '''
-cat << EOF > devops/Dockerfile
-FROM fellah/gitbook
-COPY devops/gitbook /srv/gitbook
-EOF'''
-
-                }
+//                steps {
+//                    sh '''
+//cat << EOF > devops/Dockerfile
+//FROM fellah/gitbook
+//COPY devops/gitbook /srv/gitbook
+//EOF'''
+//
+//                }
             }
 
 //            stage("生成dockerfile") {
