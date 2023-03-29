@@ -27,48 +27,62 @@ def call(GIT_URL) {
                 }
             }
 
-
-            stage("生成dockerfile") {
-
+            stage('docker镜像构建') {
+                steps {
+                    sh "mkdir -p devops"
+                    sh "mv /home/jenkins/agent/workspace/backend  devops/gitbook"
+                }
                 steps {
                     sh '''
-cat << EOF > /home/jenkins/agent/workspace/Dockerfile
+cat << EOF > devops/Dockerfile
 FROM fellah/gitbook
-COPY /home/jenkins/agent/workspace/backend /srv/gitbook
+COPY devops/gitbook /srv/gitbook
 EOF'''
 
                 }
+            }
 
-            }
-            stage('docker镜像构建') {
-                steps {
-                    sh "cd /home/jenkins/agent/workspace"
-                    sh "docker build -f /home/jenkins/agent/workspace/Dockerfile  -t gitbook:latest /home/jenkins/agent/workspace/"
-                    echo 'docker镜像构建成功'
-                }
-            }
-            stage("镜像上传") {
-
-                steps {
-                    sh "docker login --username=admin   --password=qwe123456 hub.7d.com"
-//                    sh "docker login --username=admin   --password=qwe123456 harbor-core.harbor.svc.cluster.local"
-                    sh "docker tag gitbook:latest hub.7d.com/library/gitbook:latest"
-                    sh "docker push hub.7d.com/library/gitbook:latest"
-                }
-            }
-//            stage("复制编译包到dockerfile目录") {
+//            stage("生成dockerfile") {
 //
 //                steps {
-//                    script {
-//                        dir("devops") {
-//                            container('kaniko') {
-//                                // 执行构建镜像及推送镜像操作
-//                                sh """/kaniko/executor --context /home/jenkins/agent/workspace/backend --dockerfile 'Dockerfile' --destination 'hub.7d.com/library/gitbook:v3' --skip-tls-verify=true"""
-//                            }
-//                        }
-//                    }
+//                    sh '''
+//cat << EOF > /home/jenkins/agent/workspace/Dockerfile
+//FROM fellah/gitbook
+//COPY /home/jenkins/agent/workspace/backend /srv/gitbook
+//EOF'''
+//
 //                }
 //            }
+
+
+//            stage('docker镜像构建') {
+//                steps {
+//                    sh "cd /home/jenkins/agent/workspace"
+//                    sh "docker build -f /home/jenkins/agent/workspace/Dockerfile  -t gitbook:latest /home/jenkins/agent/workspace/"
+//                    echo 'docker镜像构建成功'
+//                }
+//            }
+//            stage("镜像上传") {
+//
+//                steps {
+//                    sh "docker login --username=admin   --password=qwe123456 hub.7d.com"
+//                    sh "docker tag gitbook:latest hub.7d.com/library/gitbook:latest"
+//                    sh "docker push hub.7d.com/library/gitbook:latest"
+//                }
+//            }
+            stage("上传镜像") {
+
+                steps {
+                    script {
+                        dir("devops") {
+                            container('kaniko') {
+                                // 执行构建镜像及推送镜像操作
+                                sh """/kaniko/executor --context  ./ --dockerfile Dockerfile --destination 'hub.7d.com/library/gitbook:v3' --skip-tls-verify=true"""
+                            }
+                        }
+                    }
+                }
+            }
 
 //            stage("构建镜像并推送镜像") {
 //
