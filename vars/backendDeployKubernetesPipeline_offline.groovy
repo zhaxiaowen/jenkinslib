@@ -40,6 +40,21 @@ EOF'''
                 }
             }
 
+            stage("上传镜像") {
+
+                steps {
+                    script {
+                            container('kaniko') {
+                                // 执行构建镜像及推送镜像操作
+                                sh "pwd"
+                                sh """/kaniko/executor --context  ./ --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
+//                                sh """/kaniko/executor --context  ./ --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
+                            }
+
+                    }
+                }
+            }
+
 //            stage("生成dockerfile") {
 //
 //                steps {
@@ -68,20 +83,21 @@ EOF'''
 //                    sh "docker push hub.7d.com/library/gitbook:latest"
 //                }
 //            }
-            stage("上传镜像") {
-
-                steps {
-                    script {
-                        dir("workspace") {
-                            container('kaniko') {
-                                // 执行构建镜像及推送镜像操作
-                                sh "pwd"
-                                sh """/kaniko/executor --context  ./ --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
-                            }
-                        }
-                    }
-                }
-            }
+//            stage("上传镜像") {
+//
+//                steps {
+//                    script {
+//                        dir("workspace") {
+//                            container('kaniko') {
+//                                // 执行构建镜像及推送镜像操作
+//                                sh "pwd"
+//                                sh """/kaniko/executor --context  ./ --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
+////                                sh """/kaniko/executor --context  ./ --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
+//                            }
+//                        }
+//                    }
+//                }
+//            }
 
 //            stage("构建镜像并推送镜像") {
 //
