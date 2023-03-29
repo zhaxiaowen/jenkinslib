@@ -29,13 +29,13 @@ def call(GIT_URL) {
 
             stage('docker镜像构建') {
                 steps {
-                    sh "mkdir -p devops"
-                    sh "sleep 3600"
-                    sh "cp -r /home/jenkins/agent/workspace/backend  devops/gitbook"
+//                    sh "mkdir -p devops"
+//                    sh "sleep 3600"
+//                    sh "cp -r --exclude devops/ /home/jenkins/agent/workspace/backend  devops/"
                     sh '''
-cat << EOF > devops/Dockerfile
+cat << EOF > /home/jenkins/agent/workspace/Dockerfile
 FROM fellah/gitbook
-COPY devops/gitbook /srv/gitbook
+COPY /home/jenkins/agent/workspace/backend /srv/gitbook
 EOF'''
                 }
             }
@@ -72,7 +72,7 @@ EOF'''
 
                 steps {
                     script {
-                        dir("devops") {
+                        dir("workspace") {
                             container('kaniko') {
                                 // 执行构建镜像及推送镜像操作
                                 sh """/kaniko/executor --context  ./ --dockerfile Dockerfile --destination 'hub.7d.com/library/gitbook:v3' --skip-tls-verify=true"""
