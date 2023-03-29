@@ -36,9 +36,9 @@ def call(GIT_URL) {
 //                    sh "sleep 3600"
 //                    sh "cp -r --exclude devops/ /home/jenkins/agent/workspace/backend  devops/"
                     sh '''
-cat << EOF > /home/jenkins/agent/workspace/Dockerfile
+cat << EOF > Dockerfile
 FROM fellah/gitbook
-COPY /home/jenkins/agent/workspace/backend/ /srv/gitbook
+COPY backend/gitbook /srv/gitbook
 EOF'''
                 }
             }
@@ -49,8 +49,8 @@ EOF'''
                     script {
                             container('kaniko') {
                                 // 执行构建镜像及推送镜像操作
-                                sh """/kaniko/executor  --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
-//                                sh """/kaniko/executor --context  ./ --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
+//                                sh """/kaniko/executor  --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
+                                sh """/kaniko/executor --context  ./ --dockerfile Dockerfile --destination hub.7d.com/library/gitbook:v4 --skip-tls-verify=true"""
                             }
 
                     }
