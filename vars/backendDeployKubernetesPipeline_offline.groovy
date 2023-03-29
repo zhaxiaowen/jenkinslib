@@ -75,7 +75,7 @@ EOF'''
                         dir("workspace") {
                             container('kaniko') {
                                 // 执行构建镜像及推送镜像操作
-                                sh """/kaniko/executor --context  ./ --dockerfile Dockerfile --destination 'hub.7d.com/library/gitbook:v3' --skip-tls-verify=true"""
+                                sh """/kaniko/executor --context  ./ --dockerfile home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
                             }
                         }
                     }
