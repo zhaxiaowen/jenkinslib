@@ -30,6 +30,7 @@ def call(GIT_URL) {
             stage('docker镜像构建') {
                 steps {
                     sh "mkdir -p devops"
+                    sh "sleep 3600"
                     sh "cp -r /home/jenkins/agent/workspace/backend  devops/gitbook"
                     sh '''
 cat << EOF > devops/Dockerfile
