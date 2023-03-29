@@ -27,28 +27,6 @@ spec:
         - sleep
       args:
         - 99d
-#    - name: jenkinspython3
-#      image: hub.7d.com/library/centos7-python395-jenkins
-#      resources:
-#        requests:
-#          cpu: 100m
-#          memory: 100Mi
-#      command:
-#        - sleep
-#      args:
-#        - 99d
-#      env:
-#        - name: CONTAINER_ENV_VAR
-#          value: maven
-#      volumeMounts:
-#        - name: dockerclient
-#          mountPath: /usr/bin/docker
-#        - name: docker-sock
-#          mountPath: /var/run/docker.sock
-#        - name: docker-config
-#          mountPath: /etc/docker
-#        - name: timezone
-#          mountPath: /etc/localtime
     - name: jnlp
       image: jenkins/jnlp-slave:4.13.3-1-jdk11
 #      image: hub.7d.com/library/jnlp-slave_4.13.3-1-jdk11
