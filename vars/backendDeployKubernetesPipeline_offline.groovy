@@ -35,7 +35,7 @@ def call(GIT_URL) {
                     sh '''
 cat << EOF > /home/jenkins/agent/workspace/Dockerfile
 FROM fellah/gitbook
-COPY /home/jenkins/agent/workspace/backend /srv/gitbook
+COPY backend/ /srv/gitbook
 EOF'''
                 }
             }
