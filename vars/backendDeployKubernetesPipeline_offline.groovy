@@ -5,7 +5,7 @@ def call(GIT_URL) {
     pipeline {
         agent {
             kubernetes {
-                defaultContainer 'git'
+                defaultContainer 'maven'
                 yaml libraryResource('podTemplates/jenkinspython3.yml')
             }
         }
@@ -30,29 +30,22 @@ def call(GIT_URL) {
                 }
             }
 
-            stage('docker镜像构建') {
+            stage('生成Dockerfile') {
                 steps {
-//                    sh "mkdir -p devops"
-//                    sh "sleep 3600"
-//                    sh "cp -r --exclude devops/ /home/jenkins/agent/workspace/backend  devops/"
                     sh '''
 cat << EOF > Dockerfile
 FROM fellah/gitbook
 COPY gitbook /srv/gitbook
 EOF'''
-//                    sh "ls /home/jenkins/agent/workspace/"
-//                    sh "ls /home/jenkins/agent/workspace/backend"
-//                    sh "ls /home/jenkins/agent/workspace/backend"
                 }
             }
 
-            stage("上传镜像") {
+            stage("镜像构建并上传") {
 
                 steps {
                     script {
                             container('kaniko') {
                                 // 执行构建镜像及推送镜像操作
-//                                sh """/kaniko/executor  --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
                                 sh """/kaniko/executor --context  ./ --dockerfile Dockerfile --destination hub.7d.com/library/gitbook:v4 --skip-tls-verify=true"""
                             }
 
@@ -60,17 +53,6 @@ EOF'''
                 }
             }
 
-//            stage("生成dockerfile") {
-//
-//                steps {
-//                    sh '''
-//cat << EOF > /home/jenkins/agent/workspace/Dockerfile
-//FROM fellah/gitbook
-//COPY /home/jenkins/agent/workspace/backend /srv/gitbook
-//EOF'''
-//
-//                }
-//            }
 
 
 //            stage('docker镜像构建') {
@@ -88,42 +70,8 @@ EOF'''
 //                    sh "docker push hub.7d.com/library/gitbook:latest"
 //                }
 //            }
-//            stage("上传镜像") {
-//
-//                steps {
-//                    script {
-//                        dir("workspace") {
-//                            container('kaniko') {
-//                                // 执行构建镜像及推送镜像操作
-//                                sh "pwd"
-//                                sh """/kaniko/executor --context  ./ --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
-////                                sh """/kaniko/executor --context  ./ --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
-//                            }
-//                        }
-//                    }
-//                }
-//            }
 
-//            stage("构建镜像并推送镜像") {
-//
-//
-//                steps {
-//                    script {
-//                        def image_namespace = BUSINESSLINE.toLowerCase()
-//
-//                        IMAGE_NAME = "${c.DOCKER_IMAGE_PREFIX}/${image_namespace}/backend-${MODEL}:${env.build_id}-${DEPLOY_TIME}".toLowerCase()
-//
-//                        k8s.createDockerFile(BUSINESSLINE, TYPE, MODEL, ENV_NAME, "", node_type)
-//
-//                        dir(c.DOCKERFILE_DIR) {
-//                            container('kaniko') {
-//                                // 执行构建镜像及推送镜像操作
-//                                sh """/kaniko/executor --context ./ --dockerfile ${c.DOCKERFILE_FILENAME} --destination ${IMAGE_NAME.toLowerCase()}"""
-//                            }
-//                        }
-//                    }
-//                }
-//            }
+
 
 //            stage("发布") {
 //
