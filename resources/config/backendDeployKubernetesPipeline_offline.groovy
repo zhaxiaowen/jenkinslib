@@ -5,7 +5,7 @@ def call(GIT_URL) {
     pipeline {
         agent {
             kubernetes {
-                defaultContainer 'maven'
+                defaultContainer 'git'
                 yaml libraryResource('podTemplates/jenkinspython3.yml')
             }
         }
