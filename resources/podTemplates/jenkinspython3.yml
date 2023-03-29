@@ -117,7 +117,7 @@ spec:
         type: ""
     - name: kaniko-secret
       secret:
-        secretName: jenkins-harbor-register
+        secretName: jenkins-admin
         items:
           - key: .dockerconfigjson
             path: config.json
