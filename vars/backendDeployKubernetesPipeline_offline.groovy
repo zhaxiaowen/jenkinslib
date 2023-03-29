@@ -18,9 +18,6 @@ def call(GIT_URL) {
 
 
                 steps {
-//                        echo "拉取项目代码开始"
-//                        git credentialsId: "0aeecbfa-402b-4e35-bb88-8977b28e1c7c", url: "https://github.com/zhaxiaowen/study_node.git",relativeTargetDir:"gitbook"
-//                        echo "拉取项目代码结束"
                         checkout([$class                           : 'GitSCM',
                                   branches                         : [[name: '*/main']],
                                   doGenerateSubmoduleConfigurations: false,
