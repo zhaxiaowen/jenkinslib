@@ -38,8 +38,11 @@ def call(GIT_URL) {
                     sh '''
 cat << EOF > Dockerfile
 FROM fellah/gitbook
-COPY backend/gitbook /srv/gitbook
+COPY gitbook /srv/gitbook
 EOF'''
+//                    sh "ls /home/jenkins/agent/workspace/"
+//                    sh "ls /home/jenkins/agent/workspace/backend"
+//                    sh "ls /home/jenkins/agent/workspace/backend"
                 }
             }
 
