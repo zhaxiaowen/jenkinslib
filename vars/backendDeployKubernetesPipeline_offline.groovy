@@ -21,7 +21,7 @@ def call(GIT_URL) {
                         checkout([$class                           : 'GitSCM',
                                   branches                         : [[name: '*/main']],
                                   doGenerateSubmoduleConfigurations: false,
-                                  extensions                       : [[relativeTargetDir: "gitbook"]],
+                                  extensions                       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: "gitbook"]],
                                   submoduleCfg                     : [],
                                   userRemoteConfigs                : [[credentialsId: "0aeecbfa-402b-4e35-bb88-8977b28e1c7c", url: "https://github.com/zhaxiaowen/study_node.git"]]
                         ])
