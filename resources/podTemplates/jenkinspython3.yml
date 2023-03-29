@@ -56,9 +56,33 @@ spec:
         requests:
           cpu: 100m
           memory: 150Mi
-    - name: maven
-      image: jenkins/jnlp-agent-maven
-#      image: hub.7d.com/library/maven
+#    - name: maven
+#      image: jenkins/jnlp-agent-maven
+##      image: hub.7d.com/library/maven
+#      resources:
+#        requests:
+#          cpu: 500m
+#          memory: 512Mi
+#      command:
+#        - sleep
+#      args:
+#        - 99d
+#      env:
+#        - name: CONTAINER_ENV_VAR
+#          value: maven
+#      volumeMounts:
+#        - name: dockerclient
+#          mountPath: /usr/bin/docker
+#        - name: docker-sock
+#          mountPath: /var/run/docker.sock
+#        - name: docker-config
+#          mountPath: /etc/docker
+#        - name: timezone
+#          mountPath: /etc/localtime
+#      tty: true
+    - name: git
+      image: bitnami/git:latest
+      #      image: hub.7d.com/library/maven
       resources:
         requests:
           cpu: 500m
@@ -67,9 +91,6 @@ spec:
         - sleep
       args:
         - 99d
-      env:
-        - name: CONTAINER_ENV_VAR
-          value: maven
       volumeMounts:
         - name: dockerclient
           mountPath: /usr/bin/docker
