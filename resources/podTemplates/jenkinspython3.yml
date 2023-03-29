@@ -49,37 +49,14 @@ spec:
 #          mountPath: /etc/docker
 #        - name: timezone
 #          mountPath: /etc/localtime
-#    - name: jnlp
-#      image: hub.7d.com/library/jnlp-slave_4.13.3-1-jdk11
-#      resources:
-#        requests:
-#          cpu: 100m
-#          memory: 150Mi
-#    - name: maven
-#      image: hub.7d.com/library/maven
-#      resources:
-#        requests:
-#          cpu: 500m
-#          memory: 512Mi
-#      command:
-#        - sleep
-#      args:
-#        - 99d
-#      env:
-#        - name: CONTAINER_ENV_VAR
-#          value: maven
-#      volumeMounts:
-#        - name: dockerclient
-#          mountPath: /usr/bin/docker
-#        - name: docker-sock
-#          mountPath: /var/run/docker.sock
-#        - name: docker-config
-#          mountPath: /etc/docker
-#        - name: timezone
-#          mountPath: /etc/localtime
-#      tty: true
-    - name: jnlp-agent-maven
-      image: jenkins/jnlp-agent-maven
+    - name: jnlp
+      image: hub.7d.com/library/jnlp-slave_4.13.3-1-jdk11
+      resources:
+        requests:
+          cpu: 100m
+          memory: 150Mi
+    - name: maven
+      image: hub.7d.com/library/maven
       resources:
         requests:
           cpu: 500m
@@ -101,6 +78,7 @@ spec:
         - name: timezone
           mountPath: /etc/localtime
       tty: true
+
   volumes:
     - name: docker-sock
       hostPath:
