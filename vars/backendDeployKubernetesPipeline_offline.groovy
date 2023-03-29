@@ -19,7 +19,7 @@ def call(GIT_URL) {
 
                 steps {
                         checkout([$class                           : 'GitSCM',
-                                  branches                         : [[name: '*/main']],
+                                  branches                         : [[name: 'main']],
                                   doGenerateSubmoduleConfigurations: false,
                                   extensions                       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: "gitbook"]],
                                   submoduleCfg                     : [],
