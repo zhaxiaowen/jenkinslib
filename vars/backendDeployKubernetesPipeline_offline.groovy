@@ -35,7 +35,7 @@ def call(GIT_URL) {
                     sh '''
 cat << EOF > /home/jenkins/agent/workspace/Dockerfile
 FROM fellah/gitbook
-COPY backend/ /srv/gitbook
+COPY /home/jenkins/agent/workspace/backend/ /srv/gitbook
 EOF'''
                 }
             }
@@ -47,7 +47,7 @@ EOF'''
                             container('kaniko') {
                                 // 执行构建镜像及推送镜像操作
                                 sh "pwd"
-                                sh """/kaniko/executor --context  ./ --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
+                                sh """/kaniko/executor --context  /home/jenkins/agent/workspace --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
 //                                sh """/kaniko/executor --context  ./ --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
                             }
 
