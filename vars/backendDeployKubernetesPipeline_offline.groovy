@@ -63,7 +63,7 @@ EOF'''
 //                        dir("devops") {
 //                            container('kaniko') {
 //                                // 执行构建镜像及推送镜像操作
-//                                sh """/kaniko/executor --context /home/jenkins/agent/workspace/backend --dockerfile 'Dockerfile' --destination 'harbor-core.harbor.svc.cluster.local:80/library/gitbook'"""
+//                                sh """/kaniko/executor --context /home/jenkins/agent/workspace/backend --dockerfile 'Dockerfile' --destination 'hub.7d.com/library/gitbook:v3' --skip-tls-verify=true"""
 //                            }
 //                        }
 //                    }
