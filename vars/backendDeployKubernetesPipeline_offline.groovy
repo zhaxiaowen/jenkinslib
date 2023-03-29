@@ -5,7 +5,7 @@ def call(GIT_URL) {
     pipeline {
         agent {
             kubernetes {
-                defaultContainer 'git'
+                defaultContainer 'maven'
                 yaml libraryResource('podTemplates/jenkinspython3.yml')
             }
         }
@@ -20,7 +20,7 @@ def call(GIT_URL) {
                 steps {
                     script {
                         echo "拉取项目代码开始"
-                        git credentialsId: "0aeecbfa-402b-4e35-bb88-8977b28e1c7c", url: "https://github.com/zhaxiaowen/study_node"
+                        git credentialsId: "0aeecbfa-402b-4e35-bb88-8977b28e1c7c", url: "https://github.com/zhaxiaowen/study_node.git,",relativeTargetDir:"gitbook"
                         echo "拉取项目代码结束"
                     }
 
@@ -46,7 +46,7 @@ EOF'''
                     script {
                             container('kaniko') {
                                 // 执行构建镜像及推送镜像操作
-                                sh "sleep 3600"
+                                sh "pwd"
                                 sh """/kaniko/executor  --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
 //                                sh """/kaniko/executor --context  ./ --dockerfile /home/jenkins/agent/workspace/Dockerfile --destination hub.7d.com/library/gitbook:v3 --skip-tls-verify=true"""
                             }
