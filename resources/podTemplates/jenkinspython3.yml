@@ -4,7 +4,7 @@ metadata:
   labels:
     app: build
 spec:
-  dnsPolicy: ClusterFirst #继承主机dns记录
+  dnsPolicy: ClusterFirstWithHostNet #继承主机dns记录
   dnsConfig:
     options:
       - name: ndots
