@@ -4,16 +4,21 @@ metadata:
   labels:
     app: build
 spec:
-  hostAliases:
-    - ip: 192.168.50.201
-      hostnames:
-        - hub.7d.com
+  dnsPolicy: ClusterFirst #继承主机dns记录
+  dnsConfig:
+    options:
+      - name: ndots
+        value: "2"
+#  hostAliases:
+#    - ip: 192.168.50.201
+#      hostnames:
+#        - hub.zhaoxw.work
   serviceAccountName: jenkins-admin
   securityContext:
     runAsUser: 0
   containers:
     - name: kaniko
-      image: hub.7d.com/library/kaniko-project-executor
+      image: hub.zhaoxw.work/library/kaniko-project-executor
       imagePullPolicy: IfNotPresent
       resources:
         requests:
@@ -29,14 +34,14 @@ spec:
         - 99d
     - name: jnlp
 #      image: jenkins/jnlp-slave:4.13.3-1-jdk11
-      image: hub.7d.com/library/jnlp-slave_4.13.3-1-jdk11
+      image: hub.zhaoxw.work/library/jnlp-slave_4.13.3-1-jdk11
       resources:
         requests:
           cpu: 100m
           memory: 150Mi
     - name: maven
 #      image: jenkins/jnlp-agent-maven
-      image: hub.7d.com/library/maven
+      image: hub.zhaoxw.work/library/maven
       resources:
         requests:
           cpu: 500m
