@@ -4,15 +4,15 @@ metadata:
   labels:
     app: build
 spec:
-  dnsPolicy: ClusterFirstWithHostNet #继承主机dns记录
+#  dnsPolicy: ClusterFirstWithHostNet #继承主机dns记录
   dnsConfig:
     options:
       - name: ndots
         value: "2"
-#  hostAliases:
-#    - ip: 192.168.50.201
-#      hostnames:
-#        - hub.zhaoxw.work
+  hostAliases:
+    - ip: 192.168.50.201
+      hostnames:
+        - hub.zhaoxw.work
   serviceAccountName: jenkins-admin
   securityContext:
     runAsUser: 0

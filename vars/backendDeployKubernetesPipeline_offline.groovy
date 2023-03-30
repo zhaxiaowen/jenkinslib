@@ -46,7 +46,7 @@ EOF'''
                     script {
                             container('kaniko') {
                                 // 执行构建镜像及推送镜像操作
-                                sh """/kaniko/executor --context  ./ --dockerfile Dockerfile --destination hub.zhaoxw.work/library/gitbook:v5 --skip-tls-verify=true"""
+                                sh """/kaniko/executor --context  ./ --dockerfile Dockerfile --destination hub.zhaoxw.work/library/gitbook:latest --skip-tls-verify=true"""
                             }
 
                     }
