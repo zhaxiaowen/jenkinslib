@@ -46,7 +46,7 @@ EOF'''
                     script {
                             container('kaniko') {
                                 // 执行构建镜像及推送镜像操作
-                                sh """/kaniko/executor --context  ./ --dockerfile Dockerfile --destination hub.7d.com/library/gitbook:v4 --skip-tls-verify=true"""
+                                sh """/kaniko/executor --context  ./ --dockerfile Dockerfile --destination hub.zhaoxw.work/library/gitbook:v4 --skip-tls-verify=true"""
                             }
 
                     }
@@ -65,9 +65,9 @@ EOF'''
 //            stage("镜像上传") {
 //
 //                steps {
-//                    sh "docker login --username=admin   --password=qwe123456 hub.7d.com"
-//                    sh "docker tag gitbook:latest hub.7d.com/library/gitbook:latest"
-//                    sh "docker push hub.7d.com/library/gitbook:latest"
+//                    sh "docker login --username=admin   --password=qwe123456 hub.zhaoxw.work"
+//                    sh "docker tag gitbook:latest hub.zhaoxw.work/library/gitbook:latest"
+//                    sh "docker push hub.zhaoxw.work/library/gitbook:latest"
 //                }
 //            }
 
